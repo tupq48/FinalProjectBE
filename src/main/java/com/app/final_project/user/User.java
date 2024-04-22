@@ -1,5 +1,6 @@
 package com.app.final_project.user;
 import com.app.final_project.enums.RoleType;
+import com.app.final_project.userInfor.UserInfor;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,7 +23,10 @@ import java.util.List;
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int user_id;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
+    private UserInfor userInfor;
     @Column(unique = true)
     private String username;
     private String password;
