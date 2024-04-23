@@ -1,7 +1,6 @@
 package com.app.final_project.event;
 
 import com.app.final_project.event.dto.EventRequest;
-import com.app.final_project.eventImage.EventImage;
 import com.app.final_project.eventImage.EventImageService;
 import com.app.final_project.event.dto.EventDto;
 import com.app.final_project.event.dto.EventResponse;
@@ -9,17 +8,15 @@ import com.app.final_project.event.exception.EventNotFoundException;
 import com.app.final_project.event.utils.EventUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class EventService {
@@ -39,29 +36,41 @@ public class EventService {
     }
 
     public EventResponse getEventByPage(int pageSize, int page) {
-        Sort sort = Sort.by("startTime").descending();
+        EventResponse result = new EventResponse();
 
-        Pageable pageable = PageRequest.of(page - 1, pageSize, sort);
-
-        Page<Event> eventPage = eventRepository.findAll(pageable);
-        var events = eventPage.getContent();
-        List<Integer> eventId = events.stream().map(Event::getEventId).toList();
-
-        List<EventImage> eventImages = eventImageService.findAllByEventIdIn(eventId);
-
-        List<EventDto> result = new ArrayList<>();
-
-        for (int i = 0; i < eventId.size(); i++) {
-            Event event = events.get(i);
-            List<String> imageUrls = eventImages.stream().filter(eventImage -> eventImage.getEventId() == event.getEventId())
-                            .map(EventImage::getImageUrl)
-                            .collect(Collectors.toList());
-
-            result.add(EventUtils.convertEventToEventDto(event, imageUrls));
-        }
-
-        long total = eventPage.getTotalElements();
-        return EventResponse.builder().eventDtos(result).total(total).build();
+        int offset = (page - 1) * pageSize;
+        var rows = eventRepository.findEventsByPage(pageSize, offset);
+        List<EventDto> eventDtos = new ArrayList<>();
+        rows.forEach(
+            row -> {
+                int eventId = (int) row[0];
+                String eventName = (String) row[1];
+                Timestamp startTimeTimestamp = (Timestamp) row[2];
+                Timestamp endTimeTimestamp = (Timestamp) row[3];
+                LocalDateTime startTime = startTimeTimestamp.toLocalDateTime();
+                LocalDateTime endTime = endTimeTimestamp.toLocalDateTime();
+                String location = (String) row[4];
+                int point = (int) row[5];
+                String description = (String) row[6];
+                int maxAttenders = (int) row[7];
+                List<String> imageURLs = Arrays.asList(((String)row[8]).split(","));
+                long total = (long) row[9];
+                eventDtos.add(EventDto.builder()
+                        .eventId(eventId)
+                        .startTime(startTime)
+                        .endTime(endTime)
+                        .eventName(eventName)
+                        .location(location)
+                        .point(point)
+                        .description(description)
+                        .maxAttenders(maxAttenders)
+                        .imageUrls(imageURLs)
+                        .build());
+                result.setTotal(total);
+            }
+        );
+        result.setEventDtos(eventDtos);
+        return result;
     }
 
     @Transactional
