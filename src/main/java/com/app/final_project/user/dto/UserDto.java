@@ -9,6 +9,7 @@ import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -20,7 +21,7 @@ public class UserDto {
     private String urlImage;
     private Gender gender;
 
-    public UserDto(int id, String username, String name, String urlImage, Gender gender, LocalDate birthday, String phoneNumber, String gmail, RoleType role, boolean isLocked, boolean isEnabled) {
+    public UserDto(int id, String username, String name, String urlImage, Gender gender, LocalDateTime birthday, String phoneNumber, String gmail, RoleType role, boolean isLocked, boolean isEnabled) {
         this.id = id;
         this.username = username;
         this.name = name;
@@ -34,7 +35,7 @@ public class UserDto {
         this.isEnabled=isEnabled;
     }
 
-    private LocalDate birthday;
+    private LocalDateTime birthday;
     @Pattern(regexp = "^[0-9]{10}$")
     private String phoneNumber;
     @Email()
