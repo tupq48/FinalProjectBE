@@ -24,6 +24,7 @@ public class UserInfor{
     private User user;
     @Column(unique = true)
     private String fullname;
+    private String urlAvatar;
     private LocalDateTime dateOfBirth;
     @Enumerated(EnumType.STRING)
     private Gender gender;

@@ -35,7 +35,6 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     @Override
     public AuthResponse register(RegisterRequest request) {
-        System.out.println("gender:" + request.getGender());
         User newUser = new User();
         UserInfor newDetailInfor = new UserInfor();
         newDetailInfor.setFullname(request.getName().trim().toLowerCase());

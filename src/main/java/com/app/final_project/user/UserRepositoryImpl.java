@@ -17,7 +17,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
     @Autowired
     EntityManager entityManager;
     final String GET_ALL_USERS_BY_NONLOCK ="select us.user_id, uif.fullname,\n" +
-            "             us.email, us.phone_number, us.is_enabled, ui.url_image, uif.gender\n" +
+            "             us.email, us.phone_number, us.is_enabled, uif.url_avatar, uif.gender\n" +
             "            from users us  \n" +
             "\t\t\tleft join user_image ui\n" +
             "            on us.user_id= ui.user_id\n" +
@@ -52,7 +52,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                 .addScalar("email", StandardBasicTypes.STRING)
                 .addScalar("phone_number", StandardBasicTypes.STRING)
                 .addScalar("is_enabled", StandardBasicTypes.BOOLEAN)
-                .addScalar("url_image", StandardBasicTypes.STRING)
+                .addScalar("url_avatar", StandardBasicTypes.STRING)
                 .addScalar("gender", StandardBasicTypes.STRING);
 
         List<Object[]> rows = query.getResultList();
