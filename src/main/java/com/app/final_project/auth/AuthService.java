@@ -12,4 +12,6 @@ import java.io.IOException;
 
 public interface AuthService {
     public AuthResponse register(RegisterRequest request);
+
+    public AuthResponse authenticate(AuthRequest response);
 }
