@@ -25,10 +25,9 @@ public class AuthController {
 //    private final PasswordService passwordService;
 //    private final GoogleVerify googleVerify;
 
-
-    @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@RequestBody @Valid RegisterRequest request) {
-
+    @PostMapping(consumes = {"multipart/form-data"},
+    value=("/register"))
+    public ResponseEntity<AuthResponse> register(@ModelAttribute  @Valid RegisterRequest request) {
         return ResponseEntity.ok(authService.register(request));
     }
 

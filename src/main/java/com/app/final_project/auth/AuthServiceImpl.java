@@ -39,16 +39,18 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     @Override
     public AuthResponse register(RegisterRequest request) {
+        String dateTimeStr;
         User newUser = new User();
         UserInfor newDetailInfor = new UserInfor();
         newDetailInfor.setFullname(request.getName().trim().toLowerCase());
         newDetailInfor.setGender(request.getGender());
-        newDetailInfor.setAddress("");
-        String dateString = "12/01/2002";
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        LocalDate date = LocalDate.parse(dateString, formatter);
-        LocalDateTime dateTime = date.atStartOfDay();
-        newDetailInfor.setDateOfBirth(dateTime);
+        newDetailInfor.setAddress(request.getAddress());
+        if(request.getDateOfBirth() != null) {
+            dateTimeStr = request.getDateOfBirth().toString();
+            DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+            LocalDateTime dateTime = LocalDateTime.parse(dateTimeStr, formatter);
+            newDetailInfor.setDateOfBirth(dateTime);
+        }
         newDetailInfor.setUser(newUser);
 
         newUser.setUsername(request.getUsername().trim().toLowerCase());
@@ -63,7 +65,7 @@ public class AuthServiceImpl implements AuthService {
         newUser = userRepository.save(newUser);
         newDetailInfor = userInforRepository.save(newDetailInfor);
 
-        return getAuthResponse(newUser);
+            return getAuthResponse(newUser);
     }
 
     @Override

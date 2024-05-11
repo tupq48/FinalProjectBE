@@ -6,6 +6,10 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Setter
 @Getter
@@ -30,6 +34,8 @@ public class RegisterRequest {
     @NotBlank(message = "Phone is not null or empty")
     @Length(min = 10, max = 10, message = "Phone number must be 10 characters long")
     private String phoneNumber;
+    private LocalDateTime dateOfBirth;
+    private String address;
     @NonNull
     private Gender gender;
 
