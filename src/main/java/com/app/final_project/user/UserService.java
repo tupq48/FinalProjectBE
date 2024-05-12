@@ -44,6 +44,10 @@ public class UserService {
         }
     }
 
+    public Optional<User> getUserByUserName(String userName) {
+        return userRepository.findByUsername(userName);
+    }
+
     public UserDto getUserById(Integer id) {
         try {
             User user= userRepository.findById(id).orElse(null);

@@ -5,13 +5,12 @@ import com.app.final_project.event.dto.EventRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("api/event")
 public class EventController {
 
@@ -40,5 +39,22 @@ public class EventController {
                                          @RequestParam("images")List<MultipartFile> images) {
         Event savedEvent = eventService.createEvent(eventRequest, images);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedEvent);
+    }
+
+    @PutMapping(consumes = {"multipart/form-data"})
+    public ResponseEntity<?> updateEvent(EventRequest eventRequest,
+                                         @RequestParam(value = "images", required = false) List<MultipartFile> images) {
+        Event updatedEvent = eventService.updateEvent(eventRequest, images);
+        return ResponseEntity.ok().body(updatedEvent);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<?> deleteEvent(
+            @RequestParam(value = "eventId") Integer eventId
+    ){
+        boolean isDeleted = eventService.deleteEvent(eventId);
+        if (isDeleted)
+            return ResponseEntity.ok("Event with id: " + eventId + " has been deleted.");
+        return ResponseEntity.badRequest().body("An error occurred when deleting event with id: " + eventId);
     }
 }

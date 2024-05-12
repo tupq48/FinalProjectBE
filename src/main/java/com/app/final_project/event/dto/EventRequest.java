@@ -14,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 public class EventRequest {
+    private Integer eventId;
     private int point;
     private int maxAttenders;
     private String eventName;

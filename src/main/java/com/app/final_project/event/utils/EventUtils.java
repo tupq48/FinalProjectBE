@@ -23,7 +23,7 @@ public class EventUtils {
     }
 
     public static Event convertEventRequestToEvent(EventRequest eventRequest) {
-        return Event.builder()
+        Event event =  Event.builder()
                 .point(eventRequest.getPoint())
                 .maxAttenders(eventRequest.getMaxAttenders())
                 .eventName(eventRequest.getEventName())
@@ -32,5 +32,10 @@ public class EventUtils {
                 .startTime(eventRequest.getStartTime())
                 .endTime(eventRequest.getEndTime())
                 .build();
+
+        if (eventRequest.getEventId() != null)
+            event.setEventId(eventRequest.getEventId());
+        event.setIsDeleted(false);
+        return event;
     }
 }

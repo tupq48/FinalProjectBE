@@ -35,4 +35,8 @@ public class EventImageService {
         ).toList();
         eventImageRepository.saveAll(eventImages);
     }
+
+    public void deleteAllByEventId(Integer eventId) {
+        eventImageRepository.deleteAllByEventId(eventId);
+    }
 }
