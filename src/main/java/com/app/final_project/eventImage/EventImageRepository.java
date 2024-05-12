@@ -10,4 +10,6 @@ public interface EventImageRepository extends JpaRepository<EventImage, Integer>
     List<EventImage> findAllByEventIdIn(List<Integer> eventIds);
 
     List<EventImage> findAllByEventId(Integer eventId);
+
+    void deleteAllByEventId(Integer eventId);
 }

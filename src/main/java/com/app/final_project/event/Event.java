@@ -23,4 +23,5 @@ public class Event {
     private String description;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
+    private Boolean isDeleted = false;
 }
