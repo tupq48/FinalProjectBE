@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
+import java.time.LocalDate;
 
 @Setter
 @Getter
@@ -34,6 +35,8 @@ public class UserRequest {
     private String phoneNumber;
     @NonNull
     private Gender gender;
-
+    @NonNull
+    private String address;
+    private LocalDate dateOfBirth;
 
 }

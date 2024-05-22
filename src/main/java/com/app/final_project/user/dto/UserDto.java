@@ -20,21 +20,7 @@ public class UserDto {
     private String name;
     private String urlImage;
     private Gender gender;
-
-    public UserDto(int id, String username, String name, String urlImage, Gender gender, LocalDateTime birthday, String phoneNumber, String gmail, RoleType role, boolean isLocked, boolean isEnabled) {
-        this.id = id;
-        this.username = username;
-        this.name = name;
-        this.urlImage = urlImage;
-        this.gender = gender;
-        this.birthday = birthday;
-        this.phoneNumber = phoneNumber;
-        this.gmail = gmail;
-        this.role = role;
-        this.isLocked = isLocked;
-        this.isEnabled=isEnabled;
-    }
-
+    private String address;
     private LocalDateTime birthday;
     @Pattern(regexp = "^[0-9]{10}$")
     private String phoneNumber;
@@ -46,7 +32,4 @@ public class UserDto {
     private boolean isEnabled = true;
 
 
-    public UserDto() {
-
-    }
 }

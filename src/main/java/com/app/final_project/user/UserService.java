@@ -51,17 +51,18 @@ public class UserService {
     public UserDto getUserById(Integer id) {
         try {
             User user= userRepository.findById(id).orElse(null);
-            UserDto userDto = new UserDto();
-            userDto.setId(user.getUser_id());
-            userDto.setBirthday(user.getUserInfor().getDateOfBirth());
-            userDto.setGmail(user.getEmail());
-            userDto.setName(user.getUserInfor().getFullname());
-            userDto.setUsername(user.getUsername());
-            userDto.setGender(user.getUserInfor().getGender());
-            userDto.setRole(user.getRole());
-            userDto.setPhoneNumber(user.getPhoneNumber());
-            userDto.setUrlImage(user.getUserInfor().getUrlAvatar());
-            return userDto;
+            return UserDto.builder()
+                    .id(user.getUser_id())
+                    .birthday(user.getUserInfor().getDateOfBirth())
+                    .gmail(user.getEmail())
+                    .name(user.getUserInfor().getFullname())
+                    .username(user.getUsername())
+                    .gender(user.getUserInfor().getGender())
+                    .role(user.getRole())
+                    .phoneNumber(user.getPhoneNumber())
+                    .urlImage(user.getUserInfor().getUrlAvatar())
+                    .address(user.getUserInfor().getAddress())
+                    .build();
         }
         catch (Exception e){
             logger.error("Error update user with id " + id,e);
@@ -88,10 +89,9 @@ public class UserService {
         existingUserInfo.ifPresent(value -> {
             userInfor.setUser_info_id(value.getUser_info_id());
             userInfor.setFullname(userRequest.getName());
-            userInfor.setAddress(value.getAddress());
+            userInfor.setAddress(userRequest.getAddress());
             userInfor.setGender(userRequest.getGender());
             userInfor.setUser(savedUser);
-            System.out.println("ahihi");
             List<String> imgUrls;
             if(image!=null){
                 imgUrls = ImgBBUtils.uploadImages(image);
@@ -101,7 +101,7 @@ public class UserService {
             } else {
                 userInfor.setUrlAvatar(value.getUrlAvatar());
             }
-            userInfor.setDateOfBirth(value.getDateOfBirth());
+            userInfor.setDateOfBirth(userRequest.getDateOfBirth().atStartOfDay());
         });
         userInforRepository.save(userInfor);
     }

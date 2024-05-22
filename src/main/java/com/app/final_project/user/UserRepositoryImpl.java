@@ -16,13 +16,11 @@ import java.util.List;
 public class UserRepositoryImpl implements UserRepositoryCustom {
     @Autowired
     EntityManager entityManager;
-    final String GET_ALL_USERS_BY_NONLOCK ="select us.user_id, uif.fullname,\n" +
-            "             us.email, us.phone_number, us.is_enabled, uif.url_avatar, uif.gender\n" +
-            "            from users us  \n" +
-            "\t\t\tleft join user_image ui\n" +
-            "            on us.user_id= ui.user_id\n" +
-            "\t\t\tleft join user_info uif\n" +
-            "\t\t\ton us.user_id=uif.user_id";
+    final String GET_ALL_USERS ="SELECT us.user_id, uif.fullname, us.email, us.phone_number, us.is_enabled, uif.url_avatar, uif.gender\n" +
+            "FROM users us\n" +
+            "LEFT JOIN user_image ui ON us.user_id = ui.user_id\n" +
+            "LEFT JOIN user_info uif ON us.user_id = uif.user_id\n" +
+            "where us.role ='USER';";
     private UserDto convertQueryToProductDto(Session session, Object[] row) {
         Integer id = (Integer) row[0];
         String name = (String) row[1];
@@ -46,7 +44,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
     @Override
     public List<UserDto> getAllUsersCustom() {
         Session session = ConnectionProvider.openSession();
-        Query query = session.createNativeQuery(GET_ALL_USERS_BY_NONLOCK)
+        Query query = session.createNativeQuery(GET_ALL_USERS)
                 .addScalar("user_id", StandardBasicTypes.INTEGER)
                 .addScalar("fullname", StandardBasicTypes.STRING)
                 .addScalar("email", StandardBasicTypes.STRING)
