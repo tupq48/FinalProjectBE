@@ -2,10 +2,7 @@ package com.app.final_project.user;
 
 import com.app.final_project.enums.RoleType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
@@ -14,10 +11,13 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Setter
 @Getter
+@Builder
 @Table(name = "user_image")
 public class UserImage {
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private int user_id;
+        private int id;
+
+        private int userId;
         private String urlImage;
 }
