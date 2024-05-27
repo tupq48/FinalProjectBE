@@ -25,9 +25,18 @@ public class AIModelController {
     }
 
     @PostMapping("/trainModel")
-    public ResponseEntity<?> trainModel(@RequestParam(value = "images", required = true) List<MultipartFile> images) {
-        System.out.println(images.size());
-        return ResponseEntity.ok(aiModelService.trainModel(images));
+    public ResponseEntity<?> trainModel() {
+        return ResponseEntity.ok(aiModelService.trainModel());
+    }
+
+    @PostMapping("/uploadImage")
+    public ResponseEntity<?> uploadImage(@RequestParam(value = "images", required = true) List<MultipartFile> images) {
+        return ResponseEntity.ok(aiModelService.uploadImage(images));
+    }
+
+    @PostMapping("/deleteImage")
+    public ResponseEntity<?> deleteImage(@RequestParam(value = "images", required = true) List<String> imageUrls) {
+        return ResponseEntity.ok(aiModelService.deleteImage(imageUrls));
     }
 
     @PostMapping("/predict")

@@ -19,4 +19,11 @@ public class UserImageService {
         return userImageRepository.findAllByUserId(userId);
     }
 
+    public List<UserImage> findByImageUrlIn(List<String> imageUrls) {
+        return userImageRepository.findByUrlImageIsIn(imageUrls);
+    }
+
+    public void deleteALl(List<UserImage> userImages) {
+        userImageRepository.deleteAll(userImages);
+    }
 }
