@@ -4,22 +4,20 @@ import com.app.final_project.user.*;
 import com.app.final_project.util.AIModelAPIUtils;
 import com.app.final_project.util.ImgBBUtils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class AIModelService {
 
-    private final AuthenticationManager authenticationManager;
     private final UserService userService;
     private final UserImageService userImageService;
 
@@ -37,33 +35,13 @@ public class AIModelService {
         return AIModelAPIUtils.isTraining(userId);
     }
 
-    public Boolean trainModel(List<MultipartFile> images) {
+    public Boolean trainModel() {
         Integer userId = getCurrentUserId();
         if (userId == null)
             return false;
-        List<String> imageUrls = ImgBBUtils.uploadImages(images);
-//        List<String> imageUrls = Arrays.asList(
-//             "https://i.ibb.co/PxqyLMJ/1.jpg",
-//            "https://i.ibb.co/VNL9K53/4.jpg",
-//            "https://i.ibb.co/pbVx4f5/5.jpg",
-//            "https://i.ibb.co/6vDB79M/6.jpg",
-//            "https://i.ibb.co/Lr3BR0N/3.jpg",
-//            "https://i.ibb.co/8zcyTL0/2.jpg"
-//        );
-        // save anh vao db
-
-        if(AIModelAPIUtils.trainingModel(imageUrls, userId)) {
-            List<UserImage> userImages = new ArrayList<>();
-            for (var url : imageUrls) {
-                userImages.add(UserImage.builder()
-                        .userId(userId)
-                        .urlImage(url)
-                        .build());
-            }
-            userImageService.saveAll(userImages);
-            return true;
-        }
-        return false;
+        List<UserImage> userImages = userImageService.getByUserId(userId);
+        List<String> imageUrls = userImages.stream().map(UserImage::getUrlImage).collect(Collectors.toList());
+        return AIModelAPIUtils.trainingModel(imageUrls, userId);
     }
 
     public Boolean predict(MultipartFile image) {
@@ -87,5 +65,31 @@ public class AIModelService {
             return null;
         }
         return userOpt.get().getUser_id();
+    }
+
+    public List<String> uploadImage(List<MultipartFile> images) {
+        Integer userId = getCurrentUserId();
+        if (userId == null)
+            return new ArrayList<>();
+        List<String> imageUrls = ImgBBUtils.uploadImages(images);
+
+        List<UserImage> userImages = new ArrayList<>();
+        for (var url : imageUrls) {
+            userImages.add(UserImage.builder()
+                    .userId(userId)
+                    .urlImage(url)
+                    .build());
+        }
+        userImageService.saveAll(userImages);
+        return imageUrls;
+    }
+
+    public Boolean deleteImage(List<String> imageUrls) {
+        Integer userId = getCurrentUserId();
+        if (userId == null)
+            return false;
+        var userImages = userImageService.findByImageUrlIn(imageUrls);
+        userImageService.deleteALl(userImages);
+        return true;
     }
 }
