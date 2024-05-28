@@ -108,4 +108,9 @@ public class EventService {
         eventRepository.save(event);
         return true;
     }
+
+    public List<EventDto> getEventAttended(Integer userId) {
+        List<EventDto> listEventAtended= eventRepository.getListEventAttended(userId);
+        return listEventAtended;
+    }
 }

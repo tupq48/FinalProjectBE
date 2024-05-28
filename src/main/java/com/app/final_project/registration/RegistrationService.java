@@ -4,6 +4,7 @@ import com.app.final_project.event.EventService;
 import com.app.final_project.registration.Interface.IRegistrationService;
 import com.app.final_project.user.User;
 import com.app.final_project.user.UserService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -88,6 +89,12 @@ public class RegistrationService implements IRegistrationService {
         }
         var existingRegistration = registrationRepository.findByEventIdAndUserId(eventId, userId);
         return existingRegistration.map(registration -> registration.status.equals(RegistrationStatus.registered)).orElse(false);
+    }
+    @Override
+    @Transactional
+    public boolean registrationService(Integer userId, Integer eventId) {
+        registrationRepository.deleteByEventIdAndUserId(eventId,userId);
+        return true;
     }
 
     private Integer getCurrentUserId() {

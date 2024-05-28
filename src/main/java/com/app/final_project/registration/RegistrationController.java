@@ -35,4 +35,13 @@ public class RegistrationController {
         boolean isRegistered = registrationService.isUserRegistered(eventId);
         return ResponseEntity.ok(isRegistered);
     }
+    @DeleteMapping("removeRegistrantFromEvent")
+    ResponseEntity<?> removeRegistrantFromEvent(@RequestParam("userId") Integer userId,
+                                      @RequestParam("eventId") Integer eventId) {
+        Boolean result = registrationService.registrationService(userId, eventId);
+        if (result) {
+            return ResponseEntity.ok("Cancellation successful");
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cancellation failed.");
+    }
 }

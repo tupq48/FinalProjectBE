@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface UserRepositoryCustom {
     public List<UserDto> getAllUsersCustom();
+    public List<UserDto> getLisOfEventRegistrants(Integer id);
 }

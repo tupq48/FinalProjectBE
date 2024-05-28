@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface EventRepository extends JpaRepository<Event, Integer> {
+public interface EventRepository extends JpaRepository<Event, Integer>, EventRepositoryCustom {
 
     @Query(value = "CALL GetEventsByPage(:limit, :offset)", nativeQuery = true)
     List<Object[]> findEventsByPage(@Param("limit") int limit, @Param("offset") int offset);

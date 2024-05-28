@@ -18,9 +18,14 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
     EntityManager entityManager;
     final String GET_ALL_USERS ="SELECT us.user_id, uif.fullname, us.email, us.phone_number, us.is_enabled, uif.url_avatar, uif.gender\n" +
             "FROM users us\n" +
-            "LEFT JOIN user_image ui ON us.user_id = ui.user_id\n" +
             "LEFT JOIN user_info uif ON us.user_id = uif.user_id\n" +
-            "where us.role ='USER';";
+            "where us.role ='USER'";
+    final String GET_LIST_OF_EVENT_REGISTRANTS="select us.user_id, uif.fullname, us.email, " +
+            "us.phone_number, us.is_enabled, uif.url_avatar, uif.gender \n" +
+            "from registrations rg   \n" +
+            "left join users us on rg.user_id = us.user_id \n" +
+            "LEFT JOIN user_info uif ON us.user_id = uif.user_id \n" +
+            "where rg.event_id= :eventId and rg.status = 'registered';";
     private UserDto convertQueryToProductDto(Session session, Object[] row) {
         Integer id = (Integer) row[0];
         String name = (String) row[1];
@@ -45,6 +50,28 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
     public List<UserDto> getAllUsersCustom() {
         Session session = ConnectionProvider.openSession();
         Query query = session.createNativeQuery(GET_ALL_USERS)
+                .addScalar("user_id", StandardBasicTypes.INTEGER)
+                .addScalar("fullname", StandardBasicTypes.STRING)
+                .addScalar("email", StandardBasicTypes.STRING)
+                .addScalar("phone_number", StandardBasicTypes.STRING)
+                .addScalar("is_enabled", StandardBasicTypes.BOOLEAN)
+                .addScalar("url_avatar", StandardBasicTypes.STRING)
+                .addScalar("gender", StandardBasicTypes.STRING);
+
+        List<Object[]> rows = query.getResultList();
+
+        List<UserDto> result = rows.stream()
+                .map(row -> convertQueryToProductDto(session, row))
+                .toList();
+
+        session.close();
+        return result;
+    }
+    @Override
+    public List<UserDto> getLisOfEventRegistrants(Integer id) {
+        Session session = ConnectionProvider.openSession();
+        Query query = session.createNativeQuery(GET_LIST_OF_EVENT_REGISTRANTS)
+                    .setParameter("eventId",id)
                 .addScalar("user_id", StandardBasicTypes.INTEGER)
                 .addScalar("fullname", StandardBasicTypes.STRING)
                 .addScalar("email", StandardBasicTypes.STRING)

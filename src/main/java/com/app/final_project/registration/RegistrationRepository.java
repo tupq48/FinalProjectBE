@@ -13,4 +13,6 @@ import java.util.Optional;
 public interface RegistrationRepository extends JpaRepository<Registration, Integer> {
 
     Optional<Registration> findByEventIdAndUserId(Integer eventId, Integer userId);
+    void deleteByEventIdAndUserId(Integer eventId, Integer userId);
+
 }

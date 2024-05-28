@@ -6,4 +6,6 @@ public interface IRegistrationService {
     Boolean cancelRegistration(Integer eventId);
 
     boolean isUserRegistered(Integer eventId);
+    boolean registrationService(Integer userId, Integer eventId);
+
 }

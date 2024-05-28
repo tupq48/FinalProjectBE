@@ -21,6 +21,10 @@ public class UserController {
     public List<UserDto> getAll() {
         return userService.getAll();
     }
+    @GetMapping("getEventRegistrants")
+    public List<UserDto> getEventRegistrants(@RequestParam(value = "eventId") Integer id) {
+        return userService.getEventRegistrants(id);
+    }
 
     @DeleteMapping("{id}/deleteBusiness/")
     Boolean delete(@PathVariable("id") Integer id) {
