@@ -73,6 +73,11 @@ public class AIModelService {
             return new ArrayList<>();
         List<String> imageUrls = ImgBBUtils.uploadImages(images);
 
+        // check xem co image bi trung ko, neu co thi ko save
+        var savedImages = userImageService.getByUserId(userId);
+        savedImages.forEach(item -> {
+            imageUrls.remove(item.getUrlImage());
+        });
         List<UserImage> userImages = new ArrayList<>();
         for (var url : imageUrls) {
             userImages.add(UserImage.builder()

@@ -57,10 +57,10 @@ public class EventController {
             return ResponseEntity.ok("Event with id: " + eventId + " has been deleted.");
         return ResponseEntity.badRequest().body("An error occurred when deleting event with id: " + eventId);
     }
-    @GetMapping("listAventAttended")
+    @GetMapping("listEventAttended")
     public ResponseEntity<?> getEventAttended(
             @RequestParam("user_id") Integer userId){
-        var listEventAtended =eventService.getEventAttended(userId);
-        return ResponseEntity.ok(listEventAtended);
+        var listEventAttended = eventService.getEventAttended(userId);
+        return ResponseEntity.ok(listEventAttended);
     }
 }

@@ -1,5 +1,6 @@
 package com.app.final_project.event;
 
+import com.app.final_project.event.dto.EventRegistrationResponse;
 import com.app.final_project.event.dto.EventRequest;
 import com.app.final_project.eventImage.EventImageService;
 import com.app.final_project.event.dto.EventDto;
@@ -109,8 +110,7 @@ public class EventService {
         return true;
     }
 
-    public List<EventDto> getEventAttended(Integer userId) {
-        List<EventDto> listEventAtended= eventRepository.getListEventAttended(userId);
-        return listEventAtended;
+    public List<EventRegistrationResponse> getEventAttended(Integer userId) {
+        return eventRepository.getListEventAttended(userId);
     }
 }
