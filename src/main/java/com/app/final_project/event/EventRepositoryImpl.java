@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 @Repository
 public class EventRepositoryImpl implements EventRepositoryCustom{
@@ -65,6 +66,7 @@ public class EventRepositoryImpl implements EventRepositoryCustom{
 
         var result = rows.stream()
                 .map(this::convertQueryToEventRegistrationResponse)
+                .sorted(Comparator.comparing(EventRegistrationResponse::getStartTime).reversed())
                 .toList();
 
         session.close();

@@ -53,14 +53,13 @@ public class AIModelService {
             return false;
         String imageUrl = ImgBBUtils.uploadImage(image);
         Boolean isLegit =  AIModelAPIUtils.predict(imageUrl, userId);
+        var registration = registrationService.findByUserIdAndEventId(userId, eventId);
+        registration.setImageUrl(imageUrl);
         if (isLegit) {
-            var registration = registrationService.findByUserIdAndEventId(userId, eventId);
-            registration.setImageUrl(imageUrl);
             registration.setStatus(RegistrationStatus.attended);
-            registrationService.save(registration);
-            return true;
         }
-        return false;
+        registrationService.save(registration);
+        return true;
     }
 
     public List<UserImage> getAllUserImage() {
