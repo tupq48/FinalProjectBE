@@ -57,9 +57,11 @@ public class AIModelService {
         registration.setImageUrl(imageUrl);
         if (isLegit) {
             registration.setStatus(RegistrationStatus.attended);
+            registrationService.save(registration);
+            return true;
         }
         registrationService.save(registration);
-        return true;
+        return false;
     }
 
     public List<UserImage> getAllUserImage() {
