@@ -1,5 +1,7 @@
 package com.app.final_project.AImodel;
 
+import com.app.final_project.registration.RegistrationService;
+import com.app.final_project.registration.RegistrationStatus;
 import com.app.final_project.user.*;
 import com.app.final_project.util.AIModelAPIUtils;
 import com.app.final_project.util.ImgBBUtils;
@@ -20,6 +22,7 @@ public class AIModelService {
 
     private final UserService userService;
     private final UserImageService userImageService;
+    private final RegistrationService registrationService;
 
     public Boolean isModelExist() {
         Integer userId = getCurrentUserId();
@@ -44,10 +47,20 @@ public class AIModelService {
         return AIModelAPIUtils.trainingModel(imageUrls, userId);
     }
 
-    public Boolean predict(MultipartFile image) {
+    public Boolean predict(MultipartFile image, Integer eventId) {
         Integer userId = getCurrentUserId();
+        if (userId == null)
+            return false;
         String imageUrl = ImgBBUtils.uploadImage(image);
-        return AIModelAPIUtils.predict(imageUrl, userId);
+        Boolean isLegit =  AIModelAPIUtils.predict(imageUrl, userId);
+        if (isLegit) {
+            var registration = registrationService.findByUserIdAndEventId(userId, eventId);
+            registration.setImageUrl(imageUrl);
+            registration.setStatus(RegistrationStatus.attended);
+            registrationService.save(registration);
+            return true;
+        }
+        return false;
     }
 
     public List<UserImage> getAllUserImage() {

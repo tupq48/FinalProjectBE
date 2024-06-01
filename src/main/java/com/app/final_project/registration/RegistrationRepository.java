@@ -1,10 +1,5 @@
 package com.app.final_project.registration;
-
-import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -13,6 +8,9 @@ import java.util.Optional;
 public interface RegistrationRepository extends JpaRepository<Registration, Integer> {
 
     Optional<Registration> findByEventIdAndUserId(Integer eventId, Integer userId);
+
+    Optional<Registration> findByEventIdAndUserIdAndStatus(Integer eventId, Integer userId, RegistrationStatus status);
+
     void deleteByEventIdAndUserId(Integer eventId, Integer userId);
 
 }

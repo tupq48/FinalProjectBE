@@ -106,4 +106,14 @@ public class RegistrationService implements IRegistrationService {
         }
         return userOpt.get().getUser_id();
     }
+
+    @Override
+    public Registration findByUserIdAndEventId(Integer userId, Integer eventId) {
+        var resultOpt = registrationRepository.findByEventIdAndUserIdAndStatus(eventId, userId, RegistrationStatus.registered);
+        return resultOpt.orElse(null);
+    }
+
+    public void save(Registration registration) {
+        registrationRepository.save(registration);
+    }
 }

@@ -22,4 +22,5 @@ public class EventRegistrationResponse {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private RegistrationStatus status;
+    private String imageUrl;
 }

@@ -21,4 +21,5 @@ public class Registration {
     LocalDateTime registrationTime;
     @Enumerated(EnumType.STRING)
     RegistrationStatus status;
+    String imageUrl;
 }

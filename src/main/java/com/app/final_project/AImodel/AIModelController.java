@@ -40,8 +40,9 @@ public class AIModelController {
     }
 
     @PostMapping("/predict")
-    public ResponseEntity<?> predict(@RequestParam(value = "image", required = true) MultipartFile image) {
-        return ResponseEntity.ok(aiModelService.predict(image));
+    public ResponseEntity<?> predict(@RequestParam(value = "image", required = true) MultipartFile image,
+                                     @RequestParam(value = "eventId", required = true) Integer eventId) {
+        return ResponseEntity.ok(aiModelService.predict(image, eventId));
     }
 
     @GetMapping("/imagesTrain")
