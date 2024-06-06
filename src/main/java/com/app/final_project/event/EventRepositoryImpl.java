@@ -4,6 +4,7 @@ import com.app.final_project.enums.Gender;
 import com.app.final_project.event.dto.EventDto;
 import com.app.final_project.event.dto.EventRegistrationResponse;
 import com.app.final_project.registration.RegistrationStatus;
+import com.app.final_project.registration.dto.AttendanceImage;
 import com.app.final_project.user.dto.UserDto;
 import com.app.final_project.util.ConnectionProvider;
 import jakarta.persistence.EntityManager;
@@ -25,6 +26,12 @@ public class EventRepositoryImpl implements EventRepositoryCustom{
             " from registrations rg \n" +
             " join events ev on ev.event_id= rg.event_id\n" +
             " where rg.user_id = :userId and rg.status!=\"cancelled\" and ev.is_deleted=0";
+    final String GET_IMAGES_USER ="select rg.image_url as image_upload , ui.url_image as image_train\n" +
+            "from registrations rg\n" +
+            "join user_image ui\n" +
+            "on ui.user_id =rg.user_id\n" +
+            "where rg.user_id= :userId and rg.event_id= :eventId\n" +
+            "limit 1;";
     private EventRegistrationResponse convertQueryToEventRegistrationResponse(Object[] row) {
         Integer eventId = (int) row[0];
         String eventName = (String) row[1];
@@ -47,6 +54,15 @@ public class EventRepositoryImpl implements EventRepositoryCustom{
                 .imageUrl(imageUrl)
                 .build();
     }
+    private AttendanceImage convertQueryToAttendanceImage(Object[] row) {
+        String uploadImageUrl = (String) row[0];
+        String trainImageUrl = (String) row[1];
+
+        return AttendanceImage.builder().
+                uploadImageUrl(uploadImageUrl)
+                .trainImageUrl(trainImageUrl)
+                .build();
+    }
     @Override
     public List<EventRegistrationResponse> getListEventAttended(Integer userId) {
         Session session = ConnectionProvider.openSession();
@@ -67,6 +83,25 @@ public class EventRepositoryImpl implements EventRepositoryCustom{
         var result = rows.stream()
                 .map(this::convertQueryToEventRegistrationResponse)
                 .sorted(Comparator.comparing(EventRegistrationResponse::getStartTime).reversed())
+                .toList();
+
+        session.close();
+        return result;
+    }
+
+    @Override
+    public List<AttendanceImage> getListImagesUser(Integer userId, Integer eventId) {
+        Session session = ConnectionProvider.openSession();
+        Query query = session.createNativeQuery(GET_IMAGES_USER)
+                .setParameter("userId",userId)
+                .setParameter("eventId", eventId)
+                .addScalar("image_upload", StandardBasicTypes.STRING)
+                .addScalar("image_train", StandardBasicTypes.STRING);
+
+
+        List<Object[]> rows = query.getResultList();
+        var result = rows.stream()
+                .map(this::convertQueryToAttendanceImage)
                 .toList();
 
         session.close();

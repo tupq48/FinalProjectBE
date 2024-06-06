@@ -112,6 +112,10 @@ public class RegistrationService implements IRegistrationService {
         var resultOpt = registrationRepository.findByEventIdAndUserIdAndStatus(eventId, userId, RegistrationStatus.registered);
         return resultOpt.orElse(null);
     }
+    @Override
+    public boolean updateStatusRegistrants(Integer eventId, Integer userId, Integer updateBy) {
+        return registrationRepository.updateStatusRegistrants(eventId, userId, updateBy);
+    }
 
     public void save(Registration registration) {
         registrationRepository.save(registration);

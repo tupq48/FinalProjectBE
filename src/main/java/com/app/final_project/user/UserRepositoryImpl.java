@@ -20,12 +20,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
             "FROM users us\n" +
             "LEFT JOIN user_info uif ON us.user_id = uif.user_id\n" +
             "where us.role ='USER'";
-    final String GET_LIST_OF_EVENT_REGISTRANTS="select us.user_id, uif.fullname, us.email, " +
-            "us.phone_number, us.is_enabled, uif.url_avatar, uif.gender \n" +
-            "from registrations rg   \n" +
-            "left join users us on rg.user_id = us.user_id \n" +
-            "LEFT JOIN user_info uif ON us.user_id = uif.user_id \n" +
-            "where rg.event_id= :eventId and rg.status = 'registered';";
+
     private UserDto convertQueryToProductDto(Session session, Object[] row) {
         Integer id = (Integer) row[0];
         String name = (String) row[1];
@@ -68,7 +63,27 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
         return result;
     }
     @Override
-    public List<UserDto> getLisOfEventRegistrants(Integer id) {
+    public List<UserDto> getLisOfEventRegistrants(Integer id, Integer filterBy) {
+        String GET_LIST_OF_EVENT_REGISTRANTS="select us.user_id, uif.fullname, us.email, " +
+                "us.phone_number, us.is_enabled, uif.url_avatar, uif.gender \n" +
+                "from registrations rg   \n" +
+                "left join users us on rg.user_id = us.user_id \n" +
+                "LEFT JOIN user_info uif ON us.user_id = uif.user_id \n" +
+                "where rg.event_id= :eventId and rg.status = 'registered'";
+        System.out.println("filterBy: " + filterBy);
+
+        switch (filterBy){
+            case 1: {
+                GET_LIST_OF_EVENT_REGISTRANTS+=" AND isaipredicted =1";
+                break;
+            }
+            case 2:{
+                GET_LIST_OF_EVENT_REGISTRANTS+=" AND isaipredicted=0";
+                break;
+            }
+            default: break;
+        }
+        System.out.println("SQL: " + GET_LIST_OF_EVENT_REGISTRANTS);
         Session session = ConnectionProvider.openSession();
         Query query = session.createNativeQuery(GET_LIST_OF_EVENT_REGISTRANTS)
                     .setParameter("eventId",id)

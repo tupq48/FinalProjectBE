@@ -32,8 +32,8 @@ public class UserService {
     public List<UserDto> getAll(){
         return userRepository.getAllUsersCustom();
     }
-    public List<UserDto> getEventRegistrants(Integer id){
-        return userRepository.getLisOfEventRegistrants(id);
+    public List<UserDto> getEventRegistrants(Integer id, Integer filterBy){
+        return userRepository.getLisOfEventRegistrants(id, filterBy);
     }
 
     public Boolean deleteteById(Integer id) {

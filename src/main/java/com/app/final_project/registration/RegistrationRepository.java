@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface RegistrationRepository extends JpaRepository<Registration, Integer> {
+public interface RegistrationRepository extends JpaRepository<Registration, Integer>,RegistrationRepositoryCustom {
 
     Optional<Registration> findByEventIdAndUserId(Integer eventId, Integer userId);
 

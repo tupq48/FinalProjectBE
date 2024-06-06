@@ -63,4 +63,12 @@ public class EventController {
         var listEventAttended = eventService.getEventAttended(userId);
         return ResponseEntity.ok(listEventAttended);
     }
+    @GetMapping("getImagesUser")
+    public ResponseEntity<?> getImagesUser(
+            @RequestParam("userId") Integer userId,
+            @RequestParam("eventId") Integer eventId)
+    {
+        var listImagesUser = eventService.getImagesUser(userId,eventId);
+        return ResponseEntity.ok(listImagesUser);
+    }
 }

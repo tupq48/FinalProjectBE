@@ -22,8 +22,9 @@ public class UserController {
         return userService.getAll();
     }
     @GetMapping("getEventRegistrants")
-    public List<UserDto> getEventRegistrants(@RequestParam(value = "eventId") Integer id) {
-        return userService.getEventRegistrants(id);
+    public List<UserDto> getEventRegistrants(@RequestParam(value = "eventId") Integer id,
+                                             @RequestParam( value = "filter-by", defaultValue = "0") Integer filterBy) {
+        return userService.getEventRegistrants(id, filterBy);
     }
 
     @DeleteMapping("{id}/deleteBusiness/")

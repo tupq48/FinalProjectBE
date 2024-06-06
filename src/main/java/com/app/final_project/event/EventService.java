@@ -7,6 +7,7 @@ import com.app.final_project.event.dto.EventDto;
 import com.app.final_project.event.dto.EventResponse;
 import com.app.final_project.event.exception.EventNotFoundException;
 import com.app.final_project.event.utils.EventUtils;
+import com.app.final_project.registration.dto.AttendanceImage;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -112,5 +113,9 @@ public class EventService {
 
     public List<EventRegistrationResponse> getEventAttended(Integer userId) {
         return eventRepository.getListEventAttended(userId);
+    }
+
+    public List<AttendanceImage> getImagesUser(Integer userId, Integer eventId) {
+        return eventRepository.getListImagesUser(userId,eventId);
     }
 }

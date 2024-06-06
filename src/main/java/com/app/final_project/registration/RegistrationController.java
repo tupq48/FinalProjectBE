@@ -44,4 +44,12 @@ public class RegistrationController {
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cancellation failed.");
     }
+    @PutMapping("updateStatusRegistrants")
+    public ResponseEntity<?> updateStatusRegistrants(@RequestParam("userId") Integer userId,
+                                                     @RequestParam("eventId") Integer eventId,
+                                                     @RequestParam("update-by") Integer updateBy) {
+        boolean isChangeStatus= registrationService.updateStatusRegistrants(eventId, userId,updateBy);
+        if (isChangeStatus)
+            return ResponseEntity.ok("update success");
+        return ResponseEntity.badRequest().body("update false");    }
 }

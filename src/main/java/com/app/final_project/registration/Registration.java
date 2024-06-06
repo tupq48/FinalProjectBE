@@ -22,4 +22,5 @@ public class Registration {
     @Enumerated(EnumType.STRING)
     RegistrationStatus status;
     String imageUrl;
+    boolean isAIPredicted;
 }
