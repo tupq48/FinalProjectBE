@@ -56,10 +56,11 @@ public class AIModelService {
         var registration = registrationService.findByUserIdAndEventId(userId, eventId);
         registration.setImageUrl(imageUrl);
         if (isLegit) {
-            registration.setStatus(RegistrationStatus.attended);
+            registration.setIsAIPredicted(true);
             registrationService.save(registration);
             return true;
         }
+        registration.setIsAIPredicted(false);
         registrationService.save(registration);
         return false;
     }
