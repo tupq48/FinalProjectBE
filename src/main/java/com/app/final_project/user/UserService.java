@@ -84,6 +84,7 @@ public class UserService {
                 user.setPassword(value.getPassword().trim());
                 user.setEnabled(true);
                 user.setCreateAt(value.getCreateAt());
+                user.setRole(value.getRole());
             });
         }
         User savedUser = userRepository.save(user);

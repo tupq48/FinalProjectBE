@@ -69,7 +69,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                 "from registrations rg   \n" +
                 "left join users us on rg.user_id = us.user_id \n" +
                 "LEFT JOIN user_info uif ON us.user_id = uif.user_id \n" +
-                "where rg.event_id= :eventId and rg.status = 'registered'";
+                "where rg.event_id= :eventId and rg.status = 'registered' and rg.image_url is not null";
         System.out.println("filterBy: " + filterBy);
 
         switch (filterBy){
