@@ -1,6 +1,7 @@
 package com.app.final_project.user;
 
 import com.app.final_project.enums.Gender;
+import com.app.final_project.registration.RegistrationStatus;
 import com.app.final_project.user.dto.UserDto;
 import com.app.final_project.util.ConnectionProvider;
 import jakarta.persistence.EntityManager;
@@ -80,6 +81,14 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
             case 2:{
                 GET_LIST_OF_EVENT_REGISTRANTS+=" AND isaipredicted=0";
                 break;
+            }
+            case 3: {
+                 GET_LIST_OF_EVENT_REGISTRANTS="select us.user_id, uif.fullname, us.email, " +
+                        "us.phone_number, us.is_enabled, uif.url_avatar, uif.gender \n" +
+                        "from registrations rg   \n" +
+                        "left join users us on rg.user_id = us.user_id \n" +
+                        "LEFT JOIN user_info uif ON us.user_id = uif.user_id \n" +
+                        "where rg.event_id= :eventId and rg.status = 'attended';";
             }
             default: break;
         }
