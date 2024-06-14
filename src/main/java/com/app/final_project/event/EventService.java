@@ -7,6 +7,7 @@ import com.app.final_project.event.dto.EventDto;
 import com.app.final_project.event.dto.EventResponse;
 import com.app.final_project.event.exception.EventNotFoundException;
 import com.app.final_project.event.utils.EventUtils;
+import com.app.final_project.notification.NotificationService;
 import com.app.final_project.registration.dto.AttendanceImage;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,9 @@ public class EventService {
 
     @Autowired
     EventImageService eventImageService;
+
+    @Autowired
+    NotificationService notificationService;
 
     public EventDto findEventById(Integer eventId) {
         Optional<Event> eventOpt = eventRepository.findById(eventId);
@@ -86,7 +90,8 @@ public class EventService {
     public Event createEvent(EventRequest eventRequest, List<MultipartFile> images) {
         Event event = EventUtils.convertEventRequestToEvent(eventRequest);
         Event savedEvent = eventRepository.save(event);
-        eventImageService.saveListEventImage(savedEvent.getEventId(), images);
+        var eventImages = eventImageService.saveListEventImage(savedEvent.getEventId(), images);
+        notificationService.addNotificationForAllUser(savedEvent.getEventId(), eventImages.get(0).getImageUrl());
         return savedEvent;
     }
 

@@ -25,7 +25,7 @@ public class EventImageService {
     }
 
     @Transactional
-    public void saveListEventImage(int eventId, List<MultipartFile> images) {
+    public List<EventImage> saveListEventImage(int eventId, List<MultipartFile> images) {
         List<String> imgUrls = ImgBBUtils.uploadImages(images);
         List<EventImage> eventImages = imgUrls.stream().map(url ->
                 EventImage.builder()
@@ -33,7 +33,7 @@ public class EventImageService {
                         .eventId(eventId)
                         .build()
         ).toList();
-        eventImageRepository.saveAll(eventImages);
+        return eventImageRepository.saveAll(eventImages);
     }
 
     public void deleteAllByEventId(Integer eventId) {
