@@ -1,6 +1,7 @@
 package com.app.final_project.user;
 
 import com.app.final_project.auth.RegisterRequest;
+import com.app.final_project.user.dto.TopUsersByEventPoints;
 import com.app.final_project.user.dto.UserDto;
 import com.app.final_project.user.dto.UserRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,4 +46,13 @@ public class UserController {
             @RequestParam(value = "image", required = false)List<MultipartFile> image) {
         userService.updateInfoUser(userRequest,image);
     }
+
+    @GetMapping("getTopUsersByEventPoints")
+    public List<TopUsersByEventPoints> getTopUsersByEventPoints(
+            @RequestParam(value = "startDate", required = false) String startDate,
+            @RequestParam(value = "endDate", required = false) String endDate
+    ) {
+        return userService.getTopUsersByEventPoints(startDate, endDate);
+    }
+
 }
