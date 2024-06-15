@@ -66,6 +66,10 @@ public class NotificationService {
         return true;
     }
 
+    public void removeNotificationByEventId(Integer eventId) {
+        notificationRepository.deleteAllByEventId(eventId);
+    }
+
     private Integer getCurrentUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();

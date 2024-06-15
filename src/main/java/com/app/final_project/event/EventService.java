@@ -113,6 +113,8 @@ public class EventService {
         Event event = eventOpt.get();
         event.setIsDeleted(true);
         eventRepository.save(event);
+
+        notificationService.removeNotificationByEventId(eventId);
         return true;
     }
 
