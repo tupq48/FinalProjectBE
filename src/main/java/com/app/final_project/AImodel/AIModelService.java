@@ -112,4 +112,14 @@ public class AIModelService {
         userImageService.deleteALl(userImages);
         return true;
     }
+
+    public Boolean checkModel(MultipartFile image) {
+        Integer userId = getCurrentUserId();
+        if (userId == null)
+            return false;
+        if (!AIModelAPIUtils.isModelExist(userId))
+            return false;
+        String imageUrl = ImgBBUtils.uploadImage(image);
+        return AIModelAPIUtils.predict(imageUrl, userId);
+    }
 }
