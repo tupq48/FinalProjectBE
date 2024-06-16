@@ -125,4 +125,40 @@ public class EventService {
     public List<AttendanceImage> getImagesUser(Integer userId, Integer eventId) {
         return eventRepository.getListImagesUser(userId,eventId);
     }
+    public EventResponse getEventByStatus(Integer pageSize, Integer page, Integer filterBy) {
+        EventResponse result = new EventResponse();
+        var rows = eventRepository.getEventByStatus(pageSize,page, filterBy);
+        List<EventDto> eventDtos = new ArrayList<>();
+        rows.forEach(
+                row -> {
+                    int eventId = (int) row[0];
+                    String eventName = (String) row[1];
+                    LocalDateTime startTimeTimestamp = (LocalDateTime) row[2];
+                    LocalDateTime endTimeTimestamp = (LocalDateTime) row[3];
+                    LocalDateTime startTime = startTimeTimestamp;
+                    LocalDateTime endTime = endTimeTimestamp;
+                    String location = (String) row[4];
+                    int point = (int) row[5];
+                    String description = (String) row[6];
+                    int maxAttenders = (int) row[7];
+                    boolean isDeleted = (boolean) row[8];
+                    List<String> imageURLs = Arrays.asList(((String)row[9]).split(","));
+                    Integer total = (Integer) row[10];
+                    eventDtos.add(EventDto.builder()
+                            .eventId(eventId)
+                            .startTime(startTime)
+                            .endTime(endTime)
+                            .eventName(eventName)
+                            .location(location)
+                            .point(point)
+                            .description(description)
+                            .maxAttenders(maxAttenders)
+                            .imageUrls(imageURLs)
+                            .build());
+                    result.setTotal(total);
+                }
+        );
+        result.setEventDtos(eventDtos);
+        return result;
+    }
 }

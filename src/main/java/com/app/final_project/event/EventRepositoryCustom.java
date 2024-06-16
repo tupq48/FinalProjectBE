@@ -9,5 +9,6 @@ import java.util.List;
 public interface EventRepositoryCustom {
     public List<EventRegistrationResponse> getListEventAttended(Integer userId);
     public List<AttendanceImage> getListImagesUser(Integer userId, Integer eventId);
+    List<Object[]> getEventByStatus(Integer pageSize, Integer page, Integer filterBy);
 
 }
