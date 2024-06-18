@@ -86,6 +86,8 @@ public class AIModelAPIUtils {
 
             if (response.getStatusCode() == HttpStatus.OK) {
                 System.out.println("Training model API call successful. message: " + response.getBody().toString());
+                if (response.getBody().toString().contains("fail"))
+                    return false;
             } else {
                 System.out.println("Training model API call failed with status code: " + response.getStatusCode());
             }
