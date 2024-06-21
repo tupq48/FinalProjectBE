@@ -50,4 +50,8 @@ public class AIModelController {
         return ResponseEntity.ok(aiModelService.getAllUserImage());
     }
 
+    @PostMapping("/checkModel")
+    public ResponseEntity<?> predict(@RequestParam(value = "image", required = true) MultipartFile image) {
+        return ResponseEntity.ok(aiModelService.checkModel(image));
+    }
 }

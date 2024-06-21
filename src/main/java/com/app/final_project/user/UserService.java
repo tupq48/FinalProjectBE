@@ -1,6 +1,7 @@
 package com.app.final_project.user;
 
 import com.app.final_project.auth.RegisterRequest;
+import com.app.final_project.user.dto.TopUsersByEventPoints;
 import com.app.final_project.user.dto.UserDto;
 import com.app.final_project.user.dto.UserRequest;
 import com.app.final_project.user.utils.UserUtils;
@@ -79,7 +80,6 @@ public class UserService {
         if (userRequest.getUsername() != null) {
             Optional<User> existingUser = userRepository.findById(userRequest.getId());
             existingUser.ifPresent(value -> {
-                System.out.println("có trùng id");
                 user.setUser_id(value.getUser_id());
                 user.setPassword(value.getPassword().trim());
                 user.setEnabled(true);
@@ -108,5 +108,9 @@ public class UserService {
             userInfor.setDateOfBirth(userRequest.getDateOfBirth().atStartOfDay());
         });
         userInforRepository.save(userInfor);
+    }
+
+    public List<TopUsersByEventPoints> getTopUsersByEventPoints(String startDate, String endDate) {
+        return userRepository.getTopUsersByEventPoints(startDate, endDate);
     }
 }

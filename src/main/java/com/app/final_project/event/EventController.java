@@ -71,4 +71,14 @@ public class EventController {
         var listImagesUser = eventService.getImagesUser(userId,eventId);
         return ResponseEntity.ok(listImagesUser);
     }
+    @GetMapping("getEventByStatus")
+    public ResponseEntity<?> getEventByStatus(
+            @RequestParam(defaultValue = "8") Integer pageSize,
+            @RequestParam(defaultValue = "1") Integer page,
+            @RequestParam("filter_by") Integer filterBy
+    ){
+
+        var eventDtos = eventService.getEventByStatus(pageSize, page, filterBy);
+        return ResponseEntity.ok(eventDtos);
+    }
 }

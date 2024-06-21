@@ -107,4 +107,72 @@ public class EventRepositoryImpl implements EventRepositoryCustom{
         session.close();
         return result;
     }
+
+    @Override
+    public List<Object[]> getEventByStatus(Integer pageSize, Integer page, Integer filterBy) {
+        String SQL_TOTAL_FILTER = null;
+        String CONDITIONS = null;
+        int offset = (page - 1) * pageSize;
+        switch (filterBy) {
+            case 0: {
+                SQL_TOTAL_FILTER = "(SELECT COUNT(*) FROM events WHERE is_deleted != 1) AS total\n";
+                CONDITIONS = "WHERE e.is_deleted != 1\n";
+                break;
+            }
+            case 1: {
+                SQL_TOTAL_FILTER = "(SELECT COUNT(*) FROM events WHERE is_deleted != 1 and start_time <= curdate() and end_time >= curdate()) AS total\n";
+                CONDITIONS = "WHERE e.is_deleted != 1 and e.start_time <= curdate() and e.end_time >= curdate()\n";
+                break;
+            }
+            case 2: {
+                SQL_TOTAL_FILTER = "(SELECT COUNT(*) FROM events WHERE is_deleted != 1 and start_time > curdate()) AS total\n";
+                CONDITIONS = "WHERE e.is_deleted != 1 and e.start_time > curdate()\n";
+                break;
+            }
+            case 3: {
+                SQL_TOTAL_FILTER = "(SELECT COUNT(*) FROM events WHERE is_deleted != 1 and end_time < curdate()) AS total\n";
+                CONDITIONS = "WHERE e.is_deleted != 1 and e.end_time < curdate()\n";
+                break;
+            }
+            default:
+                break;
+        }
+        String GET_EVENT_BY_STATUS = "SELECT \n" +
+                "    e.*,\n" +
+                "    ei.list_url,\n" +
+                SQL_TOTAL_FILTER +
+                "FROM \n" +
+                "    events e\n" +
+                "LEFT JOIN (\n" +
+                "    SELECT \n" +
+                "        event_id AS id,\n" +
+                "        GROUP_CONCAT(image_url ORDER BY image_url ASC SEPARATOR ', ') AS list_url\n" +
+                "    FROM \n" +
+                "        event_images\n" +
+                "    GROUP BY \n" +
+                "        event_id\n" +
+                ") AS ei ON ei.id = e.event_id \n" +
+                CONDITIONS +
+                "ORDER BY \n" +
+                "    e.start_time DESC\n" +
+                "LIMIT :limit OFFSET :offset";
+        Session session = ConnectionProvider.openSession();
+        Query query = session.createNativeQuery(GET_EVENT_BY_STATUS)
+                .setParameter("limit", pageSize)
+                .setParameter("offset", offset)
+                .addScalar("event_id", StandardBasicTypes.INTEGER)
+                .addScalar("event_name", StandardBasicTypes.STRING)
+                .addScalar("start_time", StandardBasicTypes.LOCAL_DATE_TIME)
+                .addScalar("end_time", StandardBasicTypes.LOCAL_DATE_TIME)
+                .addScalar("location", StandardBasicTypes.STRING)
+                .addScalar("point", StandardBasicTypes.INTEGER)
+                .addScalar("description", StandardBasicTypes.STRING)
+                .addScalar("max_attenders", StandardBasicTypes.INTEGER)
+                .addScalar("is_deleted", StandardBasicTypes.BOOLEAN)
+                .addScalar("list_url", StandardBasicTypes.STRING)
+                .addScalar("total", StandardBasicTypes.INTEGER);
+
+        List<Object[]> rows = query.getResultList();
+        return  rows;
+    }
 }
