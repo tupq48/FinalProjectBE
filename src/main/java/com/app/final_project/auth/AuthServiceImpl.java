@@ -42,7 +42,7 @@ public class AuthServiceImpl implements AuthService {
         String dateTimeStr;
         User newUser = new User();
         UserInfor newDetailInfor = new UserInfor();
-        newDetailInfor.setFullname(request.getName().trim().toLowerCase());
+        newDetailInfor.setFullname(request.getName().trim());
         newDetailInfor.setGender(request.getGender());
         newDetailInfor.setAddress(request.getAddress());
         if(request.getDateOfBirth() != null) {
