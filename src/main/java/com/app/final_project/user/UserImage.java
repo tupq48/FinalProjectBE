@@ -20,4 +20,5 @@ public class UserImage {
 
         private int userId;
         private String urlImage;
+        private String urlRoundFaceImage;
 }

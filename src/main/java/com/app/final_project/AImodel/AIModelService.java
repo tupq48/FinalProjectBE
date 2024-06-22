@@ -52,13 +52,19 @@ public class AIModelService {
         if (userId == null)
             return false;
         String imageUrl = ImgBBUtils.uploadImage(image);
-        Boolean isLegit =  AIModelAPIUtils.predict(imageUrl, userId);
         var registration = registrationService.findByUserIdAndEventId(userId, eventId);
-        registration.setImageUrl(imageUrl);
+        Object[] obj =  AIModelAPIUtils.predictReturnStatusAndImageUrl(imageUrl, userId);
+        if (obj == null)
+            return false;
+        boolean isLegit = (boolean) obj[0];
         if (isLegit) {
+            String finalUrl = (String) obj[1];
+            registration.setImageUrl(finalUrl);
             registration.setIsAIPredicted(true);
             registrationService.save(registration);
             return true;
+        } else {
+            registration.setImageUrl(imageUrl);
         }
         registration.setIsAIPredicted(false);
         registrationService.save(registration);
@@ -93,15 +99,22 @@ public class AIModelService {
         savedImages.forEach(item -> {
             imageUrls.remove(item.getUrlImage());
         });
+
+        var faceRoundedImageUrls = AIModelAPIUtils.roundFaceInImages(imageUrls);
+
         List<UserImage> userImages = new ArrayList<>();
+        int i = 0;
         for (var url : imageUrls) {
             userImages.add(UserImage.builder()
-                    .userId(userId)
-                    .urlImage(url)
-                    .build());
+                                    .userId(userId)
+                                    .urlImage(url)
+                                    .urlRoundFaceImage(faceRoundedImageUrls.get(i))
+                                    .build());
+            i++;
         }
+
         userImageService.saveAll(userImages);
-        return imageUrls;
+        return faceRoundedImageUrls;
     }
 
     public Boolean deleteImage(List<String> imageUrls) {

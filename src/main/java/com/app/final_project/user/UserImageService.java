@@ -20,8 +20,9 @@ public class UserImageService {
     }
 
     public List<UserImage> findByImageUrlIn(List<String> imageUrls) {
-        return userImageRepository.findByUrlImageIsIn(imageUrls);
+        return userImageRepository.findByUrlRoundFaceImageIsIn(imageUrls);
     }
+
 
     public void deleteALl(List<UserImage> userImages) {
         userImageRepository.deleteAll(userImages);
