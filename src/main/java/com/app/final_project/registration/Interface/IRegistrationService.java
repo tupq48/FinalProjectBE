@@ -13,4 +13,6 @@ public interface IRegistrationService {
     Registration findByUserIdAndEventId(Integer userId, Integer eventId);
 
     boolean updateStatusRegistrants(Integer eventId, Integer userId, Integer updateBy);
+
+    boolean updateStatusRegistrantsPredicted(Integer eventId);
 }

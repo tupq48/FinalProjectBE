@@ -116,6 +116,10 @@ public class RegistrationService implements IRegistrationService {
     public boolean updateStatusRegistrants(Integer eventId, Integer userId, Integer updateBy) {
         return registrationRepository.updateStatusRegistrants(eventId, userId, updateBy);
     }
+    @Override
+    public boolean updateStatusRegistrantsPredicted(Integer eventId) {
+        return registrationRepository.updateStatusRegistrantsPredicted(eventId);
+    }
 
     public void save(Registration registration) {
         registrationRepository.save(registration);
