@@ -2,6 +2,8 @@ package com.app.final_project.registration;
 
 import com.app.final_project.event.Event;
 import com.app.final_project.event.EventService;
+import com.app.final_project.notification.Notification;
+import com.app.final_project.notification.NotificationService;
 import com.app.final_project.registration.Interface.IRegistrationService;
 import com.app.final_project.user.User;
 import com.app.final_project.user.UserService;
@@ -25,6 +27,9 @@ public class RegistrationService implements IRegistrationService {
 
     @Autowired
     private EventService eventService;
+
+    @Autowired
+    private NotificationService notificationService;
 
     @Override
     @Transactional
@@ -122,8 +127,32 @@ public class RegistrationService implements IRegistrationService {
         return resultOpt.orElse(null);
     }
     @Override
+    @Transactional
     public boolean updateStatusRegistrants(Integer eventId, Integer userId, Integer updateBy) {
-        return registrationRepository.updateStatusRegistrants(eventId, userId, updateBy);
+        Boolean isSuccess = registrationRepository.updateStatusRegistrants(eventId, userId, updateBy);
+        Notification notification = Notification.builder()
+                .userId(userId)
+                .eventId(eventId)
+                .isUnRead(true)
+                .createdAt(LocalDateTime.now())
+                .build();
+
+        if (isSuccess && updateBy == 0) {
+            // thực hiện tạo thông báo đến user
+            notification.setTitle("Admin");
+            notification.setDescription("has approved your evidence.");
+            notification.setAvatar("https://i.ibb.co/LJ4w8QN/accept.jpg");
+            notificationService.save(notification);
+        }
+
+        if (isSuccess && updateBy == 1) {
+            // thực hiện tạo thông báo đến user
+            notification.setTitle("Admin");
+            notification.setDescription("has rejected your evidence.");
+            notification.setAvatar("https://i.ibb.co/19TddCK/reject.png");
+            notificationService.save(notification);
+        }
+        return isSuccess;
     }
     @Override
     public boolean updateStatusRegistrantsPredicted(Integer eventId) {

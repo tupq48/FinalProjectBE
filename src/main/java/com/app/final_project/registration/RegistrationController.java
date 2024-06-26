@@ -55,11 +55,10 @@ public class RegistrationController {
     }
     @PutMapping("updateStatusRegistrantsPredicted")
     public ResponseEntity<?> updateStatusRegistrantsPredicted(@RequestParam("eventId") Integer eventId){
-        System.out.println("eventId: " + eventId);
         if(eventId == null){
             return ResponseEntity.badRequest().body("update false");
         }
-        boolean isChangeStatus= registrationService.updateStatusRegistrantsPredicted(eventId);
+        boolean isChangeStatus = registrationService.updateStatusRegistrantsPredicted(eventId);
         if (isChangeStatus)
             return ResponseEntity.ok("update success");
         return ResponseEntity.badRequest().body("update false");

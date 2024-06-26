@@ -79,4 +79,8 @@ public class NotificationService {
         }
         return userOpt.get().getUser_id();
     }
+
+    public void save(Notification notification) {
+        notificationRepository.save(notification);
+    }
 }
