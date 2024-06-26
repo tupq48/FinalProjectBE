@@ -46,6 +46,9 @@ public class EventService {
     public Optional<Event> getEventById(Integer eventId) {
         return eventRepository.findById(eventId);
     }
+    public Optional<Event> getEventByIdWithLock(Integer eventId) {
+        return eventRepository.findByIdWithLock(eventId);
+    }
 
     public EventResponse getEventByPage(int pageSize, int page) {
         EventResponse result = new EventResponse();

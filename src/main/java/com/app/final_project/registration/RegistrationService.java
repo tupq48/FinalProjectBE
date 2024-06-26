@@ -1,14 +1,15 @@
 package com.app.final_project.registration;
 
+import com.app.final_project.event.Event;
 import com.app.final_project.event.EventService;
 import com.app.final_project.registration.Interface.IRegistrationService;
 import com.app.final_project.user.User;
 import com.app.final_project.user.UserService;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -26,13 +27,21 @@ public class RegistrationService implements IRegistrationService {
     private EventService eventService;
 
     @Override
+    @Transactional
     public Boolean registerEvent(Integer eventId) {
+        var eventOpt = eventService.getEventByIdWithLock(eventId);
+        Event event = eventOpt.get();
+        int maxAttendees = event.getMaxAttenders();
+        int currentAttendees = registrationRepository.countByEventIdAndStatus(eventId, RegistrationStatus.registered);
+        System.out.println("maxAttendees: " + maxAttendees + ", currentAttendees: " + currentAttendees );
+        if (currentAttendees >= maxAttendees) {
+            return false;
+        }
         Integer userId = getCurrentUserId();
         if (userId == null) {
             return false;
         }
 
-        var eventOpt = eventService.getEventById(eventId);
         if (eventOpt.isEmpty() || eventOpt.get().getStartTime().isBefore(LocalDateTime.now()))
         {
             return false;

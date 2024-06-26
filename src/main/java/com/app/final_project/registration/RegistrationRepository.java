@@ -13,4 +13,5 @@ public interface RegistrationRepository extends JpaRepository<Registration, Inte
 
     void deleteByEventIdAndUserId(Integer eventId, Integer userId);
 
+    int countByEventIdAndStatus(Integer eventId, RegistrationStatus registrationStatus);
 }
