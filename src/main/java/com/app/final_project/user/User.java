@@ -1,10 +1,8 @@
 package com.app.final_project.user;
 import com.app.final_project.enums.RoleType;
+import com.app.final_project.userInfor.UserInfor;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,11 +16,15 @@ import java.util.List;
 @AllArgsConstructor
 @Setter
 @Getter
+@Builder
 @Table(name = "users")
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int user_id;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
+    private UserInfor userInfor;
     @Column(unique = true)
     private String username;
     private String password;

@@ -58,7 +58,7 @@ public class JwtFilter extends OncePerRequestFilter {
             if (jwtService.validateToken(accessToken)) {
                 Map<String, Object> map = jwtService.extractInfoToken(accessToken);
                 User user = new User();
-                user.setId((Integer) map.get("id"));
+                user.setUser_id((Integer) map.get("id"));
                 user.setUsername((String) map.get("username"));
                 List<String> authorityStrings = (List<String>) map.get("authorities");
                 List<GrantedAuthority> authorities = authorityStrings.stream()

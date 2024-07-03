@@ -21,13 +21,10 @@ import org.springframework.web.cors.CorsConfigurationSource;
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class WebSecurityConfig {
-    private static final String[] WHITE_LIST_URL = {"/api/product/**", "/api/category/**", "/api/brand/**",
+    private static final String[] WHITE_LIST_URL = {
             "/public/**", "/api/auth/**", "/oauth2/**",
             "/", "/error", "/csrf",
             "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs", "/v3/api-docs/**",
-            "/api/promotion/**", "/api/payments/**", "api/vouchers/**","api/orders/**",
-            "/api/statistical/**", "/**"
-
     };
     private final AuthenticationProvider authenticationProvider;
     private final JwtFilter jwtFilter;
