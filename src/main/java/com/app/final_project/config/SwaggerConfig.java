@@ -28,7 +28,7 @@ public class SwaggerConfig {
         devServer.setDescription("Server URL in Development environment");
 
         Server prodServer = new Server();
-        prodServer.setUrl("https://pbl6shopfashion-production.up.railway.app");
+        prodServer.setUrl("https://finalprojectbe-production-e532.up.railway.app");
         prodServer.setDescription("Server URL in Production environment");
 
         return new OpenAPI()
