@@ -19,8 +19,8 @@ public class Product {
     private int productId;
     private int productPrice;
     private String productName;
+    private int productQuantity;
     private List<String> productImagesUrl;
     private String description;
-    private int productCategoryId;
     private Boolean isDeleted = false;
 }

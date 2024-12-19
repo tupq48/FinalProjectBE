@@ -16,12 +16,12 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @GetMapping()
+    @GetMapping("/products")
     public List<Product> getAllProducts() {
         return productService.getAllProduct();
     }
 
-    @PostMapping(consumes = {"multipart/form-data"})
+    @PostMapping(consumes = {"multipart/form-data"}, value = ("/add"))
     public Product insertProduct(Product product,
                                  @RequestParam("images")List<MultipartFile> images) {
         return productService.saveProduct(product, images);

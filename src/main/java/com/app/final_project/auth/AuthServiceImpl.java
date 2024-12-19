@@ -153,6 +153,7 @@ public class AuthServiceImpl implements AuthService {
                 .id(user.getUser_id())
                 .username(user.getUsername())
                 .accessToken(accessToken)
+                .role(user.getRole())
                 .build();
     }
 }
