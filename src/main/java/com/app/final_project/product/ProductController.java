@@ -31,4 +31,16 @@ public class ProductController {
     public Product getProductById(@PathVariable int id) {
         return productService.getProductById(id);
     }
+    
+    @PostMapping("/delete/{id}")
+    public Product deleteProduct(@PathVariable int id) {
+        return productService.deleteProduct(id);
+    }
+
+    @PostMapping(consumes = {"multipart/form-data"}, value = ("/update"))
+    public Product updateProduct(Product product,
+                                 @RequestParam(value = "images", required = false) List<MultipartFile> images,
+                                 boolean isAddMoreImages ) {
+        return productService.updateProduct(product, images, isAddMoreImages);
+    }
 }
