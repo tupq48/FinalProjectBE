@@ -6,6 +6,8 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.app.final_project.orderDetail.OrderDetail;
+
 @Entity
 @Table(name = "products")
 @NoArgsConstructor
@@ -23,4 +25,7 @@ public class Product {
     private List<String> productImagesUrl;
     private String description;
     private Boolean isDeleted = false;
+    
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderDetail> orderDetails;
 }

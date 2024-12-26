@@ -22,11 +22,11 @@ public class UserController {
     public List<UserDto> getAll() {
         return userService.getAll();
     }
-    @GetMapping("getEventRegistrants")
-    public List<UserDto> getEventRegistrants(@RequestParam(value = "eventId") Integer id,
-                                             @RequestParam( value = "filter-by", defaultValue = "0") Integer filterBy) {
-        return userService.getEventRegistrants(id, filterBy);
-    }
+//    @GetMapping("getEventRegistrants")
+//    public List<UserDto> getEventRegistrants(@RequestParam(value = "eventId") Integer id,
+//                                             @RequestParam( value = "filter-by", defaultValue = "0") Integer filterBy) {
+//        return userService.getEventRegistrants(id, filterBy);
+//    }
 
     @DeleteMapping("{id}/deleteBusiness/")
     Boolean delete(@PathVariable("id") Integer id) {
@@ -47,12 +47,12 @@ public class UserController {
         userService.updateInfoUser(userRequest,image);
     }
 
-    @GetMapping("getTopUsersByEventPoints")
-    public List<TopUsersByEventPoints> getTopUsersByEventPoints(
-            @RequestParam(value = "startDate", required = false) String startDate,
-            @RequestParam(value = "endDate", required = false) String endDate
-    ) {
-        return userService.getTopUsersByEventPoints(startDate, endDate);
-    }
+//    @GetMapping("getTopUsersByEventPoints")
+//    public List<TopUsersByEventPoints> getTopUsersByEventPoints(
+//            @RequestParam(value = "startDate", required = false) String startDate,
+//            @RequestParam(value = "endDate", required = false) String endDate
+//    ) {
+//        return userService.getTopUsersByEventPoints(startDate, endDate);
+//    }
 
 }

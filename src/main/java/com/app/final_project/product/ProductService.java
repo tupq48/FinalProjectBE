@@ -1,5 +1,6 @@
 package com.app.final_project.product;
 import com.app.final_project.eventImage.EventImageService;
+import com.app.final_project.product.dto.CreateProductRequest;
 import com.app.final_project.util.ImgBBUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,10 +21,15 @@ public class ProductService {
                 .toList();
     }
 
-    public Product saveProduct(Product product, List<MultipartFile> images) {
+    public Product saveProduct(CreateProductRequest product, List<MultipartFile> images) {
         var imageUrls = ImgBBUtils.uploadImages(images);
-        product.setProductImagesUrl(imageUrls);
-        return productRepository.save(product);
+        Product productCreated = new Product();
+        productCreated.setProductPrice(product.getProductPrice());
+        productCreated.setProductName(product.getProductName());
+        productCreated.setProductQuantity(product.getProductQuantity());
+        productCreated.setDescription(product.getDescription());
+        productCreated.setProductImagesUrl(imageUrls);
+        return productRepository.save(productCreated);
     }
 
     public Product getProductById(int id) {

@@ -2,6 +2,8 @@ package com.app.final_project.product;
 
 import com.app.final_project.event.Event;
 import com.app.final_project.event.dto.EventRequest;
+import com.app.final_project.product.dto.CreateProductRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +24,7 @@ public class ProductController {
     }
 
     @PostMapping(consumes = {"multipart/form-data"}, value = ("/add"))
-    public Product insertProduct(Product product,
+    public Product insertProduct(CreateProductRequest product,
                                  @RequestParam("images")List<MultipartFile> images) {
         return productService.saveProduct(product, images);
     }
