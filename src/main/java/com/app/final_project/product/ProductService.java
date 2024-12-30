@@ -20,6 +20,7 @@ public class ProductService {
     public Product saveProduct(Product product, List<MultipartFile> images) {
         var imageUrls = ImgBBUtils.uploadImages(images);
         product.setProductImagesUrl(imageUrls);
+        product.setProductId(null);
         return productRepository.save(product);
     }
 
