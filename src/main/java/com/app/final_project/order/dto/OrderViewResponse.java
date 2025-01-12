@@ -33,4 +33,5 @@ public class OrderViewResponse {
     private LocalDateTime updatedAt;
 //    private User user;
     private List<OrderDetailViewResponse> orderDetails;
+    private String userId;
 }

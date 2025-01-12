@@ -13,6 +13,7 @@ public class OrderDetailViewResponse {
 	private int id;
     private int price;
     private int quantity;
+    private int productId;
     private Boolean isDeleted = false;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

@@ -1,20 +1,13 @@
 package com.app.final_project.order;
 
+import org.mortbay.log.Log;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.app.final_project.common.PaginationRequest;
 import com.app.final_project.common.PaginationResponse;
 import com.app.final_project.order.dto.CreateOrderByCartRequest;
-import com.app.final_project.order.dto.OrderViewResponse;
-
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 @RestController
 @RequestMapping("api/order")
@@ -63,7 +56,7 @@ public class OrderController {
 //    }
 
 	@PostMapping
-	public ResponseEntity<?> createOrder(CreateOrderByCartRequest createOrder) {
+	public ResponseEntity<?> createOrder(@RequestBody CreateOrderByCartRequest createOrder) {
 		try {
 			var order = orderService.createOrderByCart(createOrder);
 			return ResponseEntity.ok(order);

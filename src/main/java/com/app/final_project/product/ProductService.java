@@ -68,7 +68,7 @@ public class ProductService {
                                 .productName(product.getProductName())
                                 .productQuantity(product.getProductQuantity())
                                 .productPrice(product.getProductPrice())
-                                .isDeleted(false)
+                                .isDeleted(product.getIsDeleted())
                                 .productImagesUrl(newList)
                                 .build();
         return productRepository.save(result);

@@ -25,7 +25,4 @@ public class Product {
     private List<String> productImagesUrl;
     private String description;
     private Boolean isDeleted = false;
-    
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderDetail> orderDetails;
 }

@@ -99,18 +99,17 @@ public class CartServiceImpl implements CartService{
 
 	@Override
 	@Transactional
-	public CartViewResponse updateCart(int id, UpdateCartRequest updateCart) {
+	public CartViewResponse updateCart(int id, int quantity) {
 		Cart cart = cartRepository.findById(id)
 				.orElseThrow(() -> new RuntimeException("Cart not found with id: " + id));
 		Product product = productRepository.findById(cart.getProduct().getProductId())
 				.orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
 		
-		if (product.getProductQuantity() < updateCart.getQuantity()) {
+		if (product.getProductQuantity() < quantity) {
 			throw new RuntimeException("Invalid quantity with product ID: " + id);
 	    }
 		
-        cart.setQuantity(updateCart.getQuantity());
-        cart.setUpdatedAt(LocalDateTime.now());
+        cart.setQuantity(quantity);
         cartRepository.save(cart);
 
 		return modelMapper.map(cart, CartViewResponse.class);

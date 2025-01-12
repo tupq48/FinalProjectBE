@@ -3,21 +3,13 @@ package com.app.final_project.cart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.app.final_project.cart.dto.CartViewResponse;
 import com.app.final_project.cart.dto.CreateCartRequest;
 import com.app.final_project.cart.dto.UpdateCartRequest;
 import com.app.final_project.common.PaginationRequest;
 import com.app.final_project.common.PaginationResponse;
-
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 @RestController
 @RequestMapping("/api/cart")
@@ -56,7 +48,7 @@ public class CartController {
 //    }
 
 	@PostMapping()
-	public ResponseEntity<?> createCart(CreateCartRequest createCart) {
+	public ResponseEntity<?> createCart(@RequestBody CreateCartRequest createCart) {
 		try {
 			var cart = cartService.createCart(createCart);
 			return ResponseEntity.ok(cart);
@@ -66,10 +58,10 @@ public class CartController {
 	}
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateCart(@PathVariable("id") int id, UpdateCartRequest updateCartRequest) {
+    public ResponseEntity<?> updateCart(@PathVariable("id") int id, @RequestParam("quantity") int quantity) {
     	try
 		{
-    		var updatedCart = cartService.updateCart(id, updateCartRequest);
+    		var updatedCart = cartService.updateCart(id, quantity);
             return ResponseEntity.ok(updatedCart);
 		}
 		catch (Exception ex)

@@ -3,8 +3,6 @@ package com.app.final_project.cart;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.app.final_project.enums.PaymentType;
-import com.app.final_project.orderDetail.OrderDetail;
 import com.app.final_project.product.Product;
 import com.app.final_project.user.User;
 

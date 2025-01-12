@@ -13,6 +13,6 @@ public interface CartService {
 	public CartViewResponse getCartById(int id);
 //	public PaginationResponse<Cart> getAllCartsPaginationByUser(int userId, PaginationRequest paginationRequest);
 	public CartViewResponse createCart(CreateCartRequest createCart);
-	public CartViewResponse updateCart(int id, UpdateCartRequest updateCart);
+	public CartViewResponse updateCart(int id, int quantity);
 	public void deleteCart(int id);
 }
