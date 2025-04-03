@@ -61,6 +61,7 @@ public class ProductController {
     public String sendMessageTele(@RequestParam String message) {
         producer.sendMessageToQueue(message);
         return "Message sent to Producer: " + message;
+    }
     
     @PostMapping("/delete/{id}")
     public Product deleteProduct(@PathVariable int id) {
