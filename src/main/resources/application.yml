@@ -1,0 +1,18 @@
+spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: hieupc
+    password: Hieupham123@
+    virtual-host: /
+    queues:
+      email:
+        queue-name: emailQueue
+        exchange: emailExchange
+        routingKey: emailRoutingKey
+        type: direct
+      telegram:
+        queue-name: teleQueue
+        exchange: teleExchange
+        routingKey: teleRoutingKey
+        type: direct
