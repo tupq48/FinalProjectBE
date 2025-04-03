@@ -6,6 +6,8 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.app.final_project.orderDetail.OrderDetail;
+
 @Entity
 @Table(name = "products")
 @NoArgsConstructor
@@ -16,7 +18,7 @@ import java.util.List;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int productId;
+    private Integer productId;
     private int productPrice;
     private String productName;
     private int productQuantity;

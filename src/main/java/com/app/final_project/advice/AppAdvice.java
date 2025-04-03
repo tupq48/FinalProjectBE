@@ -109,6 +109,11 @@ public class AppAdvice {
 //        return getErrorResponse(request, ex.getMessage(), ex, ex.getStatusCode().value());
 //    }
 
+   @ExceptionHandler(RuntimeException.class)
+   public ErrorResponse HandlerRuntimeException(RuntimeException ex, HttpServletRequest request) {
+       return getErrorResponse(request, ex.getMessage(), ex, 403);
+   }
+
 
     private ErrorResponse getErrorResponse(HttpServletRequest request, String message, Exception ex, int status) {
         ErrorResponse errorResponse = new ErrorResponse();

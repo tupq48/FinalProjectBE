@@ -1,5 +1,8 @@
 package com.app.final_project.user;
+import com.app.final_project.cart.Cart;
 import com.app.final_project.enums.RoleType;
+import com.app.final_project.order.Order;
+import com.app.final_project.orderDetail.OrderDetail;
 import com.app.final_project.userInfor.UserInfor;
 import jakarta.persistence.*;
 import lombok.*;
@@ -87,4 +90,11 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return isEnabled;
     }
+    
+    // ----------Related-----------
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Order> orders;
+    
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Cart> carts;
 }
