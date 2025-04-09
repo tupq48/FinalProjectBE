@@ -6,6 +6,8 @@ import com.app.final_project.user.User;
 import com.app.final_project.user.UserRepository;
 import com.app.final_project.userInfor.UserInfor;
 import com.app.final_project.userInfor.UserInforRepository;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,10 +16,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -29,7 +35,8 @@ import java.util.DuplicateFormatFlagsException;
 public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final UserInforRepository userInforRepository;
-
+    @Autowired
+    private  TokenRefreshRepository tokenRefreshRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
@@ -103,56 +110,70 @@ public class AuthServiceImpl implements AuthService {
 //     * @throws UsernameNotFoundException    Nếu không tìm thấy tên người dùng trong hệ thống.
 //     * @throws LockedOrDisableUserException Nếu người dùng bị khóa bởi quản trị viên hoặc bị vô hiệu hóa.
 //     */
-//    @Override
-//    public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
-//
-//        final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-//        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-//            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid refresh token");
-//            return;
-//        }
-//        final String refreshToken = authHeader.substring(7);
-//        User user = getUserByToken(refreshToken);
-//
-//        if (user == null) {
-//            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid refresh token");
-//            return;
-//        }
-//
-//        if (user.isLocked()) {
-//            throw new LockedOrDisableUserException("User is locked by admin : " + user.getUsername());
-//        }
-//
-//        String accessToken = jwtService.generateToken(user);
-//        AuthResponse authResponse = AuthResponse.builder()
-//                .id(user.getId())
-//                .fullName(user.getFullName())
-//                .username(user.getUsername())
-//                .accessToken(accessToken)
-//                .refreshToken(refreshToken)
-//                .build();
-//        new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
-//    }
-//
-//
-//    private User getUserByToken(String refreshToken) {
-//        TokenRefresh tokenRefresh = tokenRefreshRepository.findByToken(refreshToken);
-//        if (tokenRefresh != null &&
-//                tokenRefresh.getExpirationDate().isAfter(LocalDateTime.now())) {
-//            tokenRefresh.setExpirationDate(LocalDateTime.now().plusDays(refreshExpirationDay));
-//            tokenRefreshRepository.save(tokenRefresh);
-//            return tokenRefresh.getUser();
-//        }
-//        return null;
-//    }
+    @Override
+    public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid refresh token");
+            return;
+        }
+        final String refreshToken = authHeader.substring(7);
+        User user = getUserByToken(refreshToken);
+
+        if (user == null) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid refresh token");
+            return;
+        }
+
+        if (user.isLocked()) {
+            //throw new LockedOrDisableUserException("User is locked by admin : " + user.getUsername());
+        }
+
+        String accessToken = jwtService.generateToken(user);
+        AuthResponse authResponse = AuthResponse.builder()
+                .id(user.getUser_id())
+                .username(user.getUsername())
+                .accessToken(accessToken)
+                .build();
+        new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
+    }
+
+
+    private User getUserByToken(String refreshToken) {
+        TokenRefresh tokenRefresh = tokenRefreshRepository.findByToken(refreshToken);
+        if (tokenRefresh == null) {
+            return null;
+        }
+        if (tokenRefresh.getExpirationDate().isAfter(LocalDateTime.now())) {
+            tokenRefresh.setExpirationDate(LocalDateTime.now().plusDays(refreshExpirationDay));
+            tokenRefreshRepository.save(tokenRefresh);
+            return tokenRefresh.getUser();
+        }
+        return null;
+    }
 //
     private AuthResponse getAuthResponse(User user) {
 //
         String accessToken = jwtService.generateToken(user);
+        String refreshToken = jwtService.generateRefreshToken(user);
+
+        TokenRefresh tokenRefresh = null;
+        tokenRefresh = tokenRefreshRepository.findByUser(user);
+        if (tokenRefresh == null) {
+            tokenRefresh = new TokenRefresh();
+            tokenRefresh.setToken(refreshToken);
+            tokenRefresh.setUser(user);
+        }
+        tokenRefresh.setToken(refreshToken);
+        tokenRefresh.setExpirationDate(LocalDateTime.now().plusDays(refreshExpirationDay));
+        tokenRefreshRepository.save(tokenRefresh);
+
         return AuthResponse.builder()
                 .id(user.getUser_id())
                 .username(user.getUsername())
                 .accessToken(accessToken)
+                .refreshToken(refreshToken)
                 .role(user.getRole())
                 .build();
     }

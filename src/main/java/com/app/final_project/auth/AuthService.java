@@ -14,4 +14,5 @@ public interface AuthService {
     public AuthResponse register(RegisterRequest request);
 
     public AuthResponse authenticate(AuthRequest response);
+    public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException;
 }
