@@ -1,10 +1,10 @@
 spring:
   rabbitmq:
-    host: localhost
+    host: leopard-01.lmq.cloudamqp.com
     port: 5672
-    username: hieupc
-    password: Hieupham123@
-    virtual-host: /
+    username: wyrqoitt
+    password: BlQ0P2C9eEKXRpbPCB6nS3eWjrbWymnx
+    virtual-host: wyrqoitt
     queues:
       email:
         queue-name: emailQueue

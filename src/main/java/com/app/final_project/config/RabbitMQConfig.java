@@ -27,6 +27,8 @@ import java.util.concurrent.TimeoutException;
 //@EnableConfigurationProperties(DestinationQueues.class)
 @RequiredArgsConstructor
 public class RabbitMQConfig {
+    @Value("${spring.rabbitmq.host}")
+    private String host;
     @Value("${spring.rabbitmq.port}")
     private int port;
     @Value("${spring.rabbitmq.username}")
@@ -151,6 +153,7 @@ public class RabbitMQConfig {
     @Bean()
     public ConnectionFactory connectionFactory() {
         CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
+        connectionFactory.setHost(host);
         connectionFactory.setPort(port);
         connectionFactory.setUsername(username);
         connectionFactory.setPassword(password);
