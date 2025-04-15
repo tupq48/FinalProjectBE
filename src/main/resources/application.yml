@@ -1,0 +1,18 @@
+spring:
+  rabbitmq:
+    host: leopard-01.lmq.cloudamqp.com
+    port: 5672
+    username: wyrqoitt
+    password: BlQ0P2C9eEKXRpbPCB6nS3eWjrbWymnx
+    virtual-host: wyrqoitt
+    queues:
+      email:
+        queue-name: emailQueue
+        exchange: emailExchange
+        routingKey: emailRoutingKey
+        type: direct
+      telegram:
+        queue-name: teleQueue
+        exchange: teleExchange
+        routingKey: teleRoutingKey
+        type: direct

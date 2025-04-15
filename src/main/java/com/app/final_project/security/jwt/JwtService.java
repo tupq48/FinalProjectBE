@@ -25,7 +25,8 @@ public class JwtService {
     private String secretKey;
     @Value("${application.security.jwt.expiration}")
     private long jwtExpiration;
-
+    @Value("${application.security.jwt.refresh-token.expiration-day}")
+    private long refreshExpirationDay;
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
@@ -74,7 +75,25 @@ public class JwtService {
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
+    private String buildRefreshToken(User user, long expiration) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("id", user.getUser_id());
+        claims.put("type", "refresh"); // 👈 Phân biệt rõ là refresh token
 
+        return Jwts
+                .builder()
+                .setClaims(claims)
+                .setSubject(user.getUsername())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+
+    public String generateRefreshToken(User userDetails) {
+        return buildRefreshToken(userDetails, refreshExpirationDay * 24 * 60 * 60 * 1000); // Convert days to milliseconds
+    }
     public boolean validateToken(String jwtToken) {
         try {
             Jws<Claims> claimsJws = Jwts

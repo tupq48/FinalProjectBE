@@ -1,0 +1,34 @@
+
+services:
+   rabbitmq:
+     image: rabbitmq:3-management
+     ports:
+       - "5672:5672"    # AMQP protocol
+       - "15672:15672"  # Management Console
+     environment:
+       RABBITMQ_DEFAULT_USER: wyrqoitt 
+       RABBITMQ_DEFAULT_PASS: BlQ0P2C9eEKXRpbPCB6nS3eWjrbWymnx
+     networks:
+       - app_network
+   app:
+    build:
+      context: .  # Thư mục chứa Dockerfile
+      dockerfile: Dockerfile
+    depends_on:
+       - rabbitmq
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://turntable.proxy.rlwy.net:56054/finalproject?autoReconnect=true&allowPublicKeyRetrieval=true&useSSL=false
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: eyhcpLjSrkBcCqVFyVVPkGjCAbvkOvZq
+      SPRING_RABBITMQ_HOST: 	leopard-01.lmq.cloudamqp.com
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: wyrqoitt
+      SPRING_RABBITMQ_PASSWORD: BlQ0P2C9eEKXRpbPCB6nS3eWjrbWymnx
+    ports:
+      - "8080:8080"
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge
