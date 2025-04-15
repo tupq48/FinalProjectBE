@@ -152,6 +152,20 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.27</version> <!-- Hoặc phiên bản mới nhất -->
         </dependency>
+<!--        elasticSearch-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-elasticsearch</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>co.elastic.clients</groupId>
+            <artifactId>elasticsearch-java</artifactId>
+            <version>8.15.3</version> <!-- giống version ES của bạn -->
+        </dependency>
 
     </dependencies>
 
