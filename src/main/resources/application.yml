@@ -16,3 +16,5 @@ spring:
         exchange: teleExchange
         routingKey: teleRoutingKey
         type: direct
+  elasticsearch:
+    uris: localhost:9200

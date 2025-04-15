@@ -24,7 +24,7 @@ public class WebSecurityConfig {
     private static final String[] WHITE_LIST_URL = {
             "/public/**", "/api/auth/**", "/oauth2/**",
             "/", "/error", "/csrf",
-            "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs", "/v3/api-docs/**"
+            "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs", "/v3/api-docs/**", "/api/product/**",
     };
     private final AuthenticationProvider authenticationProvider;
     private final JwtFilter jwtFilter;
