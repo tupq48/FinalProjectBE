@@ -29,7 +29,7 @@ pipeline {
             }
         }  
     }
-    port{
+    post {
         always{
             script {
                 sh 'docker logout'
