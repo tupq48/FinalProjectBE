@@ -1,10 +1,11 @@
 pipeline {
     agent any
 
+    
+    environment {
+        DOCKERHUB_CREDENTIALS = credentials('docker-hub1')
+    } 
     stages {
-        environment {
-            DOCKERHUB_CREDENTIALS = credentials('docker-hub1')
-        }   
         stage('Clone') {
             steps {
                 git 'https://github.com/hieupham0906/FinalProjectBE.git'
